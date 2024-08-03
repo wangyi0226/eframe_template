@@ -8,7 +8,7 @@ rust-version = "1.76"
 
 [package.metadata.docs.rs]
 all-features = true
-targets = ["x86_64-unknown-linux-gnu", "wasm32-unknown-unknown"]
+targets = ["x86_64-unknown-linux-gnu"]
 
 [dependencies]
 egui = "0.28"
@@ -19,21 +19,10 @@ eframe = { version = "0.28", default-features = false, features = [
     "persistence",   # Enable restoring app state when restarting the app.
 ] }
 log = "0.4"
-
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
-
-# native:
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 env_logger = "0.10"
-
-# web:
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen-futures = "0.4"
-
-# to access the DOM (to hide the loading text)
-[target.'cfg(target_arch = "wasm32")'.dependencies.web-sys]
-version = "0.3.4"
+tokio = { version = "1", features = ["full"] }
 
 [profile.release]
 opt-level = 2 # fast and small wasm
