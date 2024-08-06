@@ -24,6 +24,31 @@ impl TemplateApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // This is also where you can customize the look and feel of egui using
         // `cc.egui_ctx.set_visuals` and `cc.egui_ctx.set_fonts`.
+        // Install my own font (maybe supporting non-latin characters):
+        let mut fonts = eframe::egui::FontDefinitions::default();
+        fonts.font_data.insert(
+            "my_font".to_owned(),
+            egui::FontData::from_static(include_bytes!("../../assets/Alibaba-PuHuiTi-Regular.ttf")),
+        ); // .ttf and .otf supported
+
+        // Put my font first (highest priority):
+        fonts
+            .families
+            .get_mut(&egui::FontFamily::Proportional)
+            .unwrap()
+            .insert(0, "my_font".to_owned());
+
+        // Put my font as last fallback for monospace:
+        fonts
+            .families
+            .get_mut(&egui::FontFamily::Monospace)
+            .unwrap()
+            .push("my_font".to_owned());
+
+        cc.egui_ctx.set_fonts(fonts);
+
+        let mut theme = egui::Visuals::light();
+        theme.panel_fill = egui::Color32::from_rgb(210, 210, 210);
 
         // Load previous app state (if any).
         // Note that you must enable the `persistence` feature for this to work.
